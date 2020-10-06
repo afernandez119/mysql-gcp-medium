@@ -1,2 +1,5 @@
-# mysql-gcp-medium
-Code for connecting to a MySQL database with python deployed in an instance of Google Cloud Platform
+# MySQL en la nube de Google y almacena tus datos desde Jupyter Notebooks con Python
+
+Códigos utilizados para acceder a una BBDD de MySQL en una instancia de Google Cloud Platform (GCP) mediante Python. 
+
+Artículo publicado en Medium.com
