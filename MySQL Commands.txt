@@ -1,0 +1,65 @@
+Conexión por ssh
+sudo apt-get update
+sudo apt-get -y install mysql-server
+sudo mysql_secure_installation
+mysql -u root -p
+
+
+#Python linux
+sudo apt-get install python-pip
+sudo pip install numpy
+sudo pip install pandas
+
+
+#Comandos MySQL
+\! clear;
+show databases;
+use DB_name;
+show tables;
+select * from TABLE_name;
+
+
+#Creación de usuarios
+CREATE USER 'newuser'@'%' IDENTIFIED BY 'user_password'; #Desde cualquier host
+CREATE USER 'newuser'@'10.8.0.5' IDENTIFIED BY 'user_password'; #Desde la ip externa 10.8.0.5
+CREATE USER 'newuser'@'localhost' IDENTIFIED BY 'user_password'; #Desde localhost
+
+#Permisos de usuario
+GRANT ALL PRIVILEGES ON *.* TO 'database_user'@'localhost'; #Todos los privilegios sobre todas las DB
+GRANT ALL PRIVILEGES ON database_name.* TO 'database_user'@'localhost'; #Todos los privilegios sobre una BD
+GRANT permission1, permission2 ON database_name.table_name TO 'database_user'@'localhost'; #Si se quieren meter otros permisos
+SHOW GRANTS FOR 'database_user'@'localhost'; #Ver permisos
+
+#Eliminación de usuarios
+SELECT user, host FROM mysql.user; #Vemos primero nombres de usuario + hosts
+DROP USER 'user'@'localhost' #Sin comillas en el user
+
+#Creación de DB y tablas
+CREATE DATABASE DB_name;
+USE DB_name;
+CREATE TABLE Invitados (
+	id INT(6) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+	firstname VARCHAR(30) NOT NULL,
+	lastname VARCHAR(30) NOT NULL,
+	email VARCHAR(50),
+	reg_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP);
+DESCRIBE TABLE_name;
+INSERT INTO TABLE_name (col_name1,  col_name2, col_name3, ...) VALUES ("StrVal1", NumVal, "StrVal2"...);
+DELETE FROM TABLE_name WHERE conditions; #Ej. id = 1
+
+
+
+#Configuring VM instance in GCP for accesing from external ip adress
+#Before installing mysql
+sudo su
+mysql --version
+vi /etc/mysql/mysql.conf.d/mysqld.cnf #here we change ip adress 127.0.1.0 to 0.0.0.0, press :wq to write and quit or :q! to quit without saving
+service mysql restart
+mysql -u root -p
+CREATE USER 'newuser'@'%' IDENTIFIED BY 'user_password'; #sin comillas en usuario
+GRANT ALL PRIVILEGES ON *.* TO 'database_user'@'localhost';
+FLUSH PRIVILEGES;
+#Now, open 3306 mysql port into de VM instance: check-in with the page: https://www.yougetsignal.com/tools/open-ports/ and external ip of the VM
+Incluir la regla firewall en la VM instance, incluir Etiqueta de destino o Target Tag, es importante. Source ip range o Rangos de IP de origen 0.0.0.0 - Abrir el puerto con TCP 3306
+Acceder a instancia, Editar, y luego meter el Target Tag o etiqueta de destino en la VM instance
+
